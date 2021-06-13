@@ -28,8 +28,8 @@ Run with the `-h` flag to get the help text :
 
 ```
 $ ./get_aqi.py -h
-usage: get_aqi.py [-h] [--delay SECONDS] [--log FILE] [--measures N]
-                  [--omnia-leds] [--sensor SENSOR]
+usage: get_aqi.py [-h] [--delay SECONDS] [--log FILE]
+                  [--measures N] [--omnia-leds] [--sensor FILE]
                   [--sensor-operation-delay SECONDS]
                   [--sensor-start-delay SECONDS]
 
@@ -41,12 +41,12 @@ optional arguments:
                         seconds to pause after getting data with the sensor
                         before taking another measure (default: 1200, ie. 20
                         minutes)
-  --log FILE, -l FILE   path to the file where data will be appended
+  --log FILE, -l FILE   path to the CSV file where data will be appended
   --measures N, -m N    get PM2.5 and PM10 values by taking N consecutive
                         measures (default: 3)
   --omnia-leds, -o      set Turris Omnia LED colors according to measures
                         (User #1 LED for PM2.5 and User #2 LED for PM10)
-  --sensor SENSOR, -s SENSOR
+  --sensor FILE, -s FILE
                         path to the SDS011 sensor (default: '/dev/ttyUSB0')
   --sensor-operation-delay SECONDS, -p SECONDS
                         seconds to let the sensor start (default: 10)
