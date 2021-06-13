@@ -14,25 +14,27 @@ def parse_args():
     parser.add_argument("--measures", "-m", default=3, metavar="N", type=int, help="get PM2.5 and PM10 values by taking N consecutive measures (default: 3)")
     parser.add_argument("--omnia-leds", "-o", action="store_true", help="set Turris Omnia LED colors according to measures (User #1 LED for PM2.5 and User #2 LED for PM10)")
     parser.add_argument("--sensor", "-s", default="/dev/ttyUSB0", help="path to the SDS011 sensor (default: '/dev/ttyUSB0')")
+    parser.add_argument("--sensor-operation-delay", "-p", default=10, metavar="SECONDS", type=int, help="seconds to let the sensor start (default: 10)")
+    parser.add_argument("--sensor-start-delay", "-t", default=1, metavar="SECONDS", type=int, help="seconds to let the sensor perform an operation : taking a measure or going to sleep (default: 1)")
 
     return parser.parse_args()
 
-def get_data(sensor, measures):
+def get_data(sensor, measures, start_delay, operation_delay):
     # Wake-up sensor
     sensor.sleep(sleep=False)
 
-    pmt_2_5 = 0
-    pmt_10 = 0
+    pmt_2_5 = 0.0
+    pmt_10 = 0.0
 
     # Let the sensor at least 10 seconds to start in order to get precise values
-    time.sleep(10)
+    time.sleep(start_delay)
 
     # Take several measures
     for _ in range(measures):
         x = sensor.query()
         pmt_2_5 = pmt_2_5 + x[0]
         pmt_10 = pmt_10 + x[1]
-        time.sleep(2)
+        time.sleep(operation_delay)
 
     # Round the measures as a number with one decimal
     pmt_2_5 = round(pmt_2_5/measures, 1)
@@ -40,7 +42,7 @@ def get_data(sensor, measures):
 
     # Put the sensor to sleep
     sensor.sleep(sleep=True)
-    time.sleep(2)
+    time.sleep(operation_delay)
 
     return pmt_2_5, pmt_10
 
@@ -101,7 +103,7 @@ args = parse_args()
 sensor = SDS011(args.sensor)
 
 while(True):
-    pmt_2_5, pmt_10 = get_data(sensor, args.measures)
+    pmt_2_5, pmt_10 = get_data(sensor, args.measures, args.sensor_start_delay, args.sensor_operation_delay)
     aqi_2_5, aqi_10 = conv_aqi(pmt_2_5, pmt_10)
 
     color_aqi_2_5 = get_aqi_color(aqi_2_5)

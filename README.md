@@ -28,17 +28,29 @@ Run with the `-h` flag to get the help text :
 
 ```
 $ ./get_aqi.py -h
-usage: get_aqi.py [-h] [--delay SECONDS] [--log FILE] [--measures N] [--omnia-leds] [--sensor SENSOR]
+usage: get_aqi.py [-h] [--delay SECONDS] [--log FILE] [--measures N]
+                  [--omnia-leds] [--sensor SENSOR]
+                  [--sensor-operation-delay SECONDS]
+                  [--sensor-start-delay SECONDS]
 
 Measure air quality using an SDS011 sensor.
 
 optional arguments:
   -h, --help            show this help message and exit
   --delay SECONDS, -d SECONDS
-                        seconds to pause after getting data with the sensor (default: 300)
+                        seconds to pause after getting data with the sensor
+                        before taking another measure (default: 1200, ie. 20
+                        minutes)
   --log FILE, -l FILE   path to the file where data will be appended
-  --measures N, -m N    get PM2.5 and PM10 values by taking N consecutive measures (default: 3)
-  --omnia-leds, -o      set Turris Omnia LED colors according to measures (User #1 LED for PM2.5 and User #2 LED for PM10)
+  --measures N, -m N    get PM2.5 and PM10 values by taking N consecutive
+                        measures (default: 3)
+  --omnia-leds, -o      set Turris Omnia LED colors according to measures
+                        (User #1 LED for PM2.5 and User #2 LED for PM10)
   --sensor SENSOR, -s SENSOR
                         path to the SDS011 sensor (default: '/dev/ttyUSB0')
+  --sensor-operation-delay SECONDS, -p SECONDS
+                        seconds to let the sensor start (default: 10)
+  --sensor-start-delay SECONDS, -t SECONDS
+                        seconds to let the sensor perform an operation :
+                        taking a measure or going to sleep (default: 1)
 ```
