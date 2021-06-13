@@ -9,7 +9,7 @@ from sds011 import SDS011
 def parse_args():
     parser = argparse.ArgumentParser(description="Measure air quality using an SDS011 sensor.")
 
-    parser.add_argument("--delay", "-d", default=300, metavar="SECONDS", type=int, help="seconds to pause after getting data with the sensor (default: 300)")
+    parser.add_argument("--delay", "-d", default=1200, metavar="SECONDS", type=int, help="seconds to pause after getting data with the sensor before taking another measure (default: 1200, ie. 20 minutes)")
     parser.add_argument("--log", "-l", metavar="FILE", help="path to the file where data will be appended")
     parser.add_argument("--measures", "-m", default=3, metavar="N", type=int, help="get PM2.5 and PM10 values by taking N consecutive measures (default: 3)")
     parser.add_argument("--omnia-leds", "-o", action="store_true", help="set Turris Omnia LED colors according to measures (User #1 LED for PM2.5 and User #2 LED for PM10)")
