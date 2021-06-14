@@ -2,14 +2,16 @@
 
 Measure ambient air quality using an SDS011 sensor on GNU/Linux. 
 
-This sensor can retrieve the current PM2.5 (particles less than or equal to 2.5 micrometers) and PM10 (particles less than or equal to 10 micrometers) levels and compute an [AQI index](https://en.wikipedia.org/wiki/Air_quality_index). Designed to run on a [Turis Omnia](https://www.turris.com/en/omnia/overview/), this tool can optionally set the color of the device's LED to visualize the air quality.
+This sensor can retrieve the current PM2.5 (particles less than or equal to 2.5 micrometers) and PM10 (particles less than or equal to 10 micrometers) levels and compute an [AQI index](https://en.wikipedia.org/wiki/Air_quality_index). Currently, three AQI indexes are supported : European Union (CAQI), Mainland China and United States of America. Measured data can be logged to a CSV file.
+
+Designed to run on a [Turis Omnia](https://www.turris.com/en/omnia/overview/), this tool can optionally set the color of the device's LED to visualize the air quality.
 
 The code is heavily inspired by Marcelo Rovai and his excellent blog post https://www.instructables.com/A-Low-cost-IoT-Air-Quality-Monitor-Based-on-Raspbe/.
 
 ## Dependencies
 
 - [`py-sds011`](https://github.com/ikalchev/py-sds011) (Interface to SDS011, bundled in the `sds011/` directory)
-- [`python-aqi`](https://pypi.org/project/python-aqi/) (Library to convert between AQI value and pollutant concentration, bundled in the `aqi/` directory)
+- [`aqipy-atmotech`](https://pypi.org/project/aqipy-atmotech/) (Library to convert between AQI value and pollutant concentration, bundled in the `aqipy/` directory)
 - [`pyserial`](https://pypi.org/project/pyserial/) (Library for serial communication)
 
 To use the sensor via its USB-Serial adapter :
@@ -28,7 +30,7 @@ Run with the `-h` flag to get the help text :
 
 ```
 $ ./get_aqi.py -h
-usage: get_aqi.py [-h] [--delay SECONDS] [--log FILE]
+usage: get_aqi.py [-h] [--country COUNTRY] [--delay SECONDS] [--log FILE]
                   [--measures N] [--omnia-leds] [--sensor FILE]
                   [--sensor-operation-delay SECONDS]
                   [--sensor-start-delay SECONDS]
@@ -37,6 +39,10 @@ Measure air quality using an SDS011 sensor.
 
 optional arguments:
   -h, --help            show this help message and exit
+  --country COUNTRY, -c COUNTRY
+                        country code (ISO 3166-1 alpha-2) used to compute AQI.
+                        Currently accepted values (default: EU) : 'CN' (AQI
+                        Mainland China), 'EU' (CAQI) and 'US' (AQI US)
   --delay SECONDS, -d SECONDS
                         seconds to pause after getting data with the sensor
                         before taking another measure (default: 1200, ie. 20
