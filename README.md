@@ -10,13 +10,34 @@ The code is heavily inspired by Marcelo Rovai and his excellent blog post https:
 
 ## Dependencies
 
-- [`py-sds011`](https://github.com/ikalchev/py-sds011) (Interface to SDS011, bundled in the `sds011/` directory)
-- [`aqipy-atmotech`](https://pypi.org/project/aqipy-atmotech/) (Library to convert between AQI value and pollutant concentration, bundled in the `aqipy/` directory)
-- [`pyserial`](https://pypi.org/project/pyserial/) (Library for serial communication)
+- [`py-sds011`](https://pypi.org/project/py-sds011/) (Interface to the SDS011 sensor)
+- [`pyserial`](https://pypi.org/project/pyserial/) (Library for serial communication, required by `py-sds011`)
+- [`aqipy-atmotech`](https://pypi.org/project/aqipy-atmotech/) (Library to convert between AQI value and pollutant concentration)
 
-To use the sensor via its USB-Serial adapter :
+To use the sensor, on OpenWRT, via its USB-Serial adapter :
 
 - [`kmod-usb-serial-ch341`](https://openwrt.org/packages/pkgdata/kmod-usb-serial-ch341) (OpenWRT kernel module for the HL-340 USB-Serial adapter used by the sensor)
+
+## Installation
+
+Use [`pip`](https://packaging.python.org/tutorials/installing-packages/) to install the required libraries from PyPI :
+
+```
+$ pip3 install py-sds011 pyserial aqipy-atmotech
+```
+
+On OpenWRT, you will need to install a kernel module to use the sensor :
+
+```
+opkg update
+opkg install kmod-usb-serial-ch341
+```
+
+Clone the repository :
+
+```
+git clone https://github.com/mboutolleau/sds011-aqi.git
+```
 
 ## Usage
 

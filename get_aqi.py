@@ -1,11 +1,13 @@
 #!/usr/bin/python3
 
 import argparse
-from collections import deque
 import datetime
 import time
+from collections import deque
+
 from aqipy import aqi_cn, aqi_us, caqi_eu
 from sds011 import SDS011
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Measure air quality using an SDS011 sensor.")
@@ -182,8 +184,8 @@ while(True):
 
         set_turris_omnia_led(color_aqi_pm25, color_aqi_pm10)
 
+    # Save measured values and AQI level to a log file 
     if args.log is not None:
-        # A log file was given
         save_log(args.log, current_pm25, current_pm10, aqi)
 
     # Wait before taking the next measure with the sensor
