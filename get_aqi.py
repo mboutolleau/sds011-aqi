@@ -5,6 +5,7 @@ import datetime
 import time
 from collections import deque
 
+import paho.mqtt.publish
 from aqipy import aqi_cn, aqi_us, caqi_eu
 from sds011 import SDS011
 
