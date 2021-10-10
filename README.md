@@ -13,6 +13,7 @@ The code is heavily inspired by Marcelo Rovai and his excellent blog post https:
 - [`py-sds011`](https://pypi.org/project/py-sds011/) (Interface to the SDS011 sensor)
 - [`pyserial`](https://pypi.org/project/pyserial/) (Library for serial communication, required by `py-sds011`)
 - [`aqipy-atmotech`](https://pypi.org/project/aqipy-atmotech/) (Library to convert between AQI value and pollutant concentration)
+- [`paho-mqtt`](https://pypi.org/project/paho-mqtt/) (Library to publish messages to an MQTT broker)
 
 To use the sensor, on OpenWRT, via its USB-Serial adapter :
 
@@ -23,7 +24,7 @@ To use the sensor, on OpenWRT, via its USB-Serial adapter :
 Use [`pip`](https://packaging.python.org/tutorials/installing-packages/) to install the required libraries from PyPI :
 
 ```
-$ pip3 install py-sds011 pyserial aqipy-atmotech
+$ pip3 install py-sds011 pyserial aqipy-atmotech paho-mqtt
 ```
 
 On OpenWRT, you will need to install a kernel module to use the sensor :
@@ -47,13 +48,14 @@ Connect a SDS011 sensor and run `get_aqi.py` to start measurements, this example
 $ ./get_aqi.py --log aqi.csv --sensor /dev/ttyUSB0
 ```
 
-Run with the `-h` flag to get the help text :
+Run with the `-h/--help` flag to get the help text :
 
 ```
-$ ./get_aqi.py -h
+$ ./get_aqi.py --help
 usage: get_aqi.py [-h] [--country COUNTRY] [--delay SECONDS] [--log FILE]
-                  [--measures N] [--omnia-leds] [--sensor FILE]
-                  [--sensor-operation-delay SECONDS]
+                  [--measures N] [--mqtt-hostname IP/HOSTNAME]
+                  [--mqtt-port PORT] [--mqtt-base-topic TOPIC] [--omnia-leds]
+                  [--sensor FILE] [--sensor-operation-delay SECONDS]
                   [--sensor-start-delay SECONDS]
 
 Measure air quality using an SDS011 sensor.
@@ -71,6 +73,12 @@ optional arguments:
   --log FILE, -l FILE   path to the CSV file where data will be appended
   --measures N, -m N    get PM2.5 and PM10 values by taking N consecutive
                         measures (default: 3)
+  --mqtt-hostname IP/HOSTNAME, -n IP/HOSTNAME
+                        IP address or hostname of the MQTT broker
+  --mqtt-port PORT, -r PORT
+                        Port number of the MQTT broker (default: '1883')
+  --mqtt-base-topic TOPIC, -i TOPIC
+                        Parent MQTT topic to use (default: 'aqi')
   --omnia-leds, -o      set Turris Omnia LED colors according to measures
                         (User #1 LED for PM2.5 and User #2 LED for PM10)
   --sensor FILE, -s FILE

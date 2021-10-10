@@ -16,6 +16,9 @@ def parse_args():
     parser.add_argument("--delay", "-d", default=1200, metavar="SECONDS", type=int, help="seconds to pause after getting data with the sensor before taking another measure (default: 1200, ie. 20 minutes)")
     parser.add_argument("--log", "-l", metavar="FILE", help="path to the CSV file where data will be appended")
     parser.add_argument("--measures", "-m", default=3, metavar="N", type=int, help="get PM2.5 and PM10 values by taking N consecutive measures (default: 3)")
+    parser.add_argument("--mqtt-hostname", "-n", metavar="IP/HOSTNAME", help="IP address or hostname of the MQTT broker")
+    parser.add_argument("--mqtt-port", "-r", default="1883", metavar="PORT", type=int, help="Port number of the MQTT broker (default: '1883')")
+    parser.add_argument("--mqtt-base-topic", "-i", default="aqi", metavar="TOPIC", help="Parent MQTT topic to use (default: 'aqi')")
     parser.add_argument("--omnia-leds", "-o", action="store_true", help="set Turris Omnia LED colors according to measures (User #1 LED for PM2.5 and User #2 LED for PM10)")
     parser.add_argument("--sensor", "-s", default="/dev/ttyUSB0", metavar="FILE", help="path to the SDS011 sensor (default: '/dev/ttyUSB0')")
     parser.add_argument("--sensor-operation-delay", "-p", default=1, metavar="SECONDS", type=int, help="seconds to let the sensor start (default: 10)")
@@ -145,6 +148,12 @@ def save_log(logfile, logged_pm25, logged_pm10, logged_aqi):
     except:
         print("[INFO] Failure in logging data") 
 
+def publish_mqtt(mqtt_hostname, mqtt_port, mqtt_messages):
+    try:
+        paho.mqtt.publish.multiple(mqtt_messages, hostname=mqtt_hostname, port=mqtt_port, client_id="get_aqi.py")
+    except:
+        print("[INFO] Failure in publishing to MQTT broker")
+
 
 args = parse_args()
 sensor = SDS011(args.sensor)
@@ -187,6 +196,26 @@ while(True):
     # Save measured values and AQI level to a log file 
     if args.log is not None:
         save_log(args.log, current_pm25, current_pm10, aqi)
+
+    # Publish measured values and AQI level to an MQTT broker
+    if args.mqtt_hostname is not None:
+        # Remove any trailing '/' in topic
+        topic = args.mqtt_base_topic
+        if args.mqtt_base_topic.endswith("/"):
+            topic = args.mqtt_base_topic.rstrip("/")
+
+        # List of messages to publish, list of tuples.
+        # The tuples are of the form ("<topic>", "<payload>", qos, retain).
+        # topic must be present and may not be empty
+        msg_aqi = (topic + "/aqi", str(aqi), 0, False)
+        msg_level = (topic + "/level", str(aqi_level["level"]), 0, False)
+        msg_current_pm25 = (topic + "/current_pm25", str(current_pm25), 0, False)
+        msg_current_pm10 = (topic + "/current_pm10", str(current_pm10), 0, False)
+
+        messages = [msg_aqi, msg_level, msg_current_pm25, msg_current_pm10]
+
+        # Publish the messages to the MQTT broker
+        publish_mqtt(args.mqtt_hostname, args.mqtt_port, messages)
 
     # Wait before taking the next measure with the sensor
     time.sleep(args.delay)
