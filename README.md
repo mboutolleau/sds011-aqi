@@ -19,6 +19,10 @@ To use the sensor, on OpenWRT, via its USB-Serial adapter :
 
 - [`kmod-usb-serial-ch341`](https://openwrt.org/packages/pkgdata/kmod-usb-serial-ch341) (OpenWRT kernel module for the HL-340 USB-Serial adapter used by the sensor)
 
+[Optional] On a Turis Omnia, to configure the LED (`indicator-1` and `indicator-2`) with colors based on the current AQI level :
+
+- [`rainbow-ng`](https://gitlab.nic.cz/turris/rainbow-ng) (Turris Omnia RGB LEDs manipulation script, usually shipped with the device OS)
+
 ## Installation
 
 Use [`pip`](https://packaging.python.org/tutorials/installing-packages/) to install the required libraries from PyPI :
@@ -27,17 +31,17 @@ Use [`pip`](https://packaging.python.org/tutorials/installing-packages/) to inst
 $ pip3 install py-sds011 pyserial aqipy-atmotech paho-mqtt
 ```
 
-On OpenWRT, you will need to install a kernel module to use the sensor :
+On OpenWRT, as `root`, you will need to install a kernel module to use the sensor :
 
 ```
-opkg update
-opkg install kmod-usb-serial-ch341
+# opkg update
+# opkg install kmod-usb-serial-ch341
 ```
 
 Clone the repository :
 
 ```
-git clone https://github.com/mboutolleau/sds011-aqi.git
+$ git clone https://github.com/mboutolleau/sds011-aqi.git
 ```
 
 ## Usage
