@@ -20,12 +20,12 @@ def parse_args():
     parser.add_argument("--log", "-l", metavar="FILE", help="path to the CSV file where data will be appended")
     parser.add_argument("--measures", "-m", default=3, metavar="N", type=int, help="get PM2.5 and PM10 values by taking N consecutive measures (default: 3)")
     parser.add_argument("--mqtt-hostname", "-n", metavar="IP/HOSTNAME", help="IP address or hostname of the MQTT broker")
-    parser.add_argument("--mqtt-port", "-r", default="1883", metavar="PORT", type=int, help="Port number of the MQTT broker (default: '1883')")
-    parser.add_argument("--mqtt-base-topic", "-i", default="aqi", metavar="TOPIC", help="Parent MQTT topic to use (default: 'aqi')")
+    parser.add_argument("--mqtt-port", "-r", default="1883", metavar="PORT", type=int, help="port number of the MQTT broker (default: '1883')")
+    parser.add_argument("--mqtt-base-topic", "-i", default="aqi", metavar="TOPIC", help="parent MQTT topic to use (default: 'aqi')")
     parser.add_argument("--omnia-leds", "-o", action="store_true", help="set Turris Omnia LED colors according to measures (User #1 LED for PM2.5 and User #2 LED for PM10)")
     parser.add_argument("--sensor", "-s", default="/dev/ttyUSB0", metavar="FILE", help="path to the SDS011 sensor (default: '/dev/ttyUSB0')")
-    parser.add_argument("--sensor-operation-delay", "-p", default=1, metavar="SECONDS", type=int, help="seconds to let the sensor start (default: 10)")
-    parser.add_argument("--sensor-start-delay", "-t", default=10, metavar="SECONDS", type=int, help="seconds to let the sensor perform an operation : taking a measure or going to sleep (default: 1)")
+    parser.add_argument("--sensor-operation-delay", "-p", default=1, metavar="SECONDS", type=int, help="operation delay in seconds for the sensor: measuring or entering sleep mode (default: 1)")
+    parser.add_argument("--sensor-start-delay", "-t", default=30, metavar="SECONDS", type=int, help="warm-up delay in seconds for the sensor. In order to allow the sensor's internal components to reach a stable operating temperature a warm-up delay of 30 seconds is typically recommended, check your sensor's documentation (default: 30)")
 
     return parser.parse_args()
 

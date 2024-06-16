@@ -64,7 +64,7 @@ usage: get_aqi.py [-h] [--country COUNTRY] [--delay SECONDS] [--log FILE]
 
 Measure air quality using an SDS011 sensor.
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   --country COUNTRY, -c COUNTRY
                         country code (ISO 3166-1 alpha-2) used to compute AQI.
@@ -80,16 +80,20 @@ optional arguments:
   --mqtt-hostname IP/HOSTNAME, -n IP/HOSTNAME
                         IP address or hostname of the MQTT broker
   --mqtt-port PORT, -r PORT
-                        Port number of the MQTT broker (default: '1883')
+                        port number of the MQTT broker (default: '1883')
   --mqtt-base-topic TOPIC, -i TOPIC
-                        Parent MQTT topic to use (default: 'aqi')
+                        parent MQTT topic to use (default: 'aqi')
   --omnia-leds, -o      set Turris Omnia LED colors according to measures
                         (User #1 LED for PM2.5 and User #2 LED for PM10)
   --sensor FILE, -s FILE
                         path to the SDS011 sensor (default: '/dev/ttyUSB0')
   --sensor-operation-delay SECONDS, -p SECONDS
-                        seconds to let the sensor start (default: 10)
+                        operation delay in seconds for the sensor: measuring
+                        or entering sleep mode (default: 1)
   --sensor-start-delay SECONDS, -t SECONDS
-                        seconds to let the sensor perform an operation :
-                        taking a measure or going to sleep (default: 1)
+                        warm-up delay in seconds for the sensor. In order to
+                        allow the sensor's internal components to reach a
+                        stable operating temperature a warm-up delay of 30
+                        seconds is typically recommended, check your sensor's
+                        documentation (default: 30)
 ```
